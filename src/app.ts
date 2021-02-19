@@ -1,11 +1,12 @@
-import { ImageComponent } from './componets/page/item/image.js';
-import { NoteComponent } from './componets/page/item/note.js';
-import { TodoComponent } from './componets/page/item/todo.js';
-import { VideoComponent } from './componets/page/item/video.js';
-import { PageComponents } from './componets/page/page.js';
+import { Component } from './components/component';
+import { ImageComponent } from './components/page/item/image.js';
+import { NoteComponent } from './components/page/item/note.js';
+import { TodoComponent } from './components/page/item/todo.js';
+import { VideoComponent } from './components/page/item/video.js';
+import { Composable, PageComponents } from './components/page/page.js';
 
 class App {
-  private readonly page: PageComponents;
+  private readonly page: Component & Composable;
   constructor(appRoot: HTMLElement) {
     this.page = new PageComponents();
     this.page.attachTo(appRoot);
@@ -14,20 +15,19 @@ class App {
       'Image Title',
       'https://picsum.photos/600/300'
     );
-    image.attachTo(appRoot, 'beforeend');
+    this.page.addChild(image);
 
     const note = new NoteComponent('NoteTitle', 'NoteBody');
-    note.attachTo(appRoot, 'beforeend');
+    this.page.addChild(note);
 
     const todo = new TodoComponent('Todo Title', 'Todolist');
-    todo.attachTo(appRoot, 'beforeend');
+    this.page.addChild(todo);
 
     const video = new VideoComponent(
       'Video Title',
       'https://www.youtube.com/embed/k3o0tvTLVjY'
     );
-
-    video.attachTo(appRoot, 'beforeend');
+    this.page.addChild(video);
   }
 }
 
