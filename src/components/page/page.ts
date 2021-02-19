@@ -3,9 +3,12 @@ import { BaseComponent, Component } from '../component.js';
 export interface Composable {
   addChild(child: Component): void;
 }
+
+type OnCLoseListener = () => void;
 class PageItemComponent
   extends BaseComponent<HTMLElement>
   implements Composable {
+  private closeListener?: OnCLoseListener;
   constructor() {
     super(`<li class="page-item">
             <section class="page-item__body"></section>
@@ -13,6 +16,13 @@ class PageItemComponent
               <button class="close">&times;</button>
             </div>
           </li>`);
+
+    const closeButton = this.element.querySelector(
+      '.close'
+    )! as HTMLButtonElement;
+    closeButton.onclick = () => {
+      this.closeListener && this.closeListener();
+    };
   }
 
   addChild(child: Component) {
@@ -20,6 +30,10 @@ class PageItemComponent
       '.page-item__body'
     )! as HTMLElement;
     child.attachTo(container);
+  }
+
+  setOnCloseListener(listener: OnCLoseListener) {
+    this.closeListener = listener;
   }
 }
 export class PageComponents
@@ -33,5 +47,8 @@ export class PageComponents
     const item = new PageItemComponent();
     item.addChild(section);
     item.attachTo(this.element, 'beforeend');
+    item.setOnCloseListener(() => {
+      item.removeFrom(this.element);
+    });
   }
 }
