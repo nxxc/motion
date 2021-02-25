@@ -12,7 +12,7 @@ import { TodoComponent } from './components/page/item/todo.js';
 import { VideoComponent } from './components/page/item/video.js';
 import {
   Composable,
-  PageComponents,
+  PageComponent,
   PageItemComponent,
 } from './components/page/page.js';
 
@@ -23,7 +23,7 @@ type InputComponentConstructor<T = (MediaData | TextData) & Component> = {
 class App {
   private readonly page: Component & Composable;
   constructor(appRoot: HTMLElement, private dialogRoot: HTMLElement) {
-    this.page = new PageComponents(PageItemComponent);
+    this.page = new PageComponent(PageItemComponent);
     this.page.attachTo(appRoot);
 
     this.bindElemntToDialog<MediaSectionInput>(
